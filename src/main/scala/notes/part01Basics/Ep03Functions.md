@@ -1,4 +1,3 @@
-
 # 🧑‍💻 Scala Function Basics: An Instructional Overview
 
 This tutorial presents the concept of functions in Scala, beginning with foundational syntax and progressing to recursive patterns and advanced best practices. It highlights functional programming principles and offers practical exercises for reinforcement.
