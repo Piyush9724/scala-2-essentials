@@ -1,7 +1,7 @@
 package com.elixirin
 package lectures.part02OOP
 
-object Ep06InheritanceAndTraits extends App {
+object Ep06Inheritance extends App {
   // SINGLE CLASS INHERITANCE
   //sealed class Animal { // sealed
   class Animal {
