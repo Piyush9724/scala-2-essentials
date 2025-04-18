@@ -1,6 +1,22 @@
 package com.elixirin
 package exercises
 
+trait MyPredicate[-T] {
+  def test(element: T) : Boolean
+}
+
+trait MyTransformer[-A, B] {
+  def transform(element: A): B
+}
+
+class EvenPredicate extends MyPredicate[Int] {
+  override def test(element: Int): Boolean = element % 2 == 0
+}
+
+class StringToIntTransformer extends MyTransformer[String, Int] {
+  override def transform(x: String): Int = x.toInt
+}
+
 abstract class MyList[+A] {
   /*
     head = first element ofthe list
@@ -16,6 +32,9 @@ abstract class MyList[+A] {
   def add[B >: A](n: B): MyList[B]
   def printElement: String
   override def toString : String = "[" + printElement + "]"
+  def map[B](transformer: MyTransformer[A, B]): MyList[B]
+  def flatMap[B](transformer: MyTransformer[A, MyList[B]]): MyList[B]
+  def filter(predicate: MyPredicate[A]): MyList[A]
 }
 
 
@@ -25,6 +44,9 @@ object Empty extends MyList[Nothing]  {
   override def isEmpty: Boolean = true
   override def add[B >: Nothing] (n: B): MyList[B] = new Cons(n, Empty)
   override def printElement: String = ""
+  override def map[B](transformer: MyTransformer[Nothing, B]): MyList[B] = Empty
+  override def flatMap[B](transformer: MyTransformer[Nothing, MyList[B]]): MyList[B] = Empty
+  override def filter(predicate: MyPredicate[Nothing]): MyList[Nothing] = Empty
 }
 
 
@@ -36,6 +58,17 @@ class Cons[+A](h: A, t: MyList[A]) extends MyList[A] {
   override def printElement: String =
     if (t.isEmpty)  "" + h
     else h + " " + t.printElement
+
+  override def map[B](transformer: MyTransformer[Nothing, B]): MyList[B] = {
+    new Cons(transformer.transform(h), t.map(transformer))
+  }
+
+  //override def flatMap[B](transformer: MyTransformer[Nothing, MyList[B]]): MyList[B] = Empty
+
+  override def filter(predicate: MyPredicate[A]): MyList[A] = {
+    if (predicate.test(h)) new Cons(h, t.filter(predicate))
+    else t.filter(predicate)
+  }
 }
 
 object ListTest extends App {
@@ -45,6 +78,7 @@ object ListTest extends App {
   println(listOfIntegers.toString)
 
 }
+
 
 
 /*
