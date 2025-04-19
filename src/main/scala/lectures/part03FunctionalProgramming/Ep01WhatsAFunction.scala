@@ -67,7 +67,7 @@ object Ep01WhatsAFunction extends App {
       }
    }
 
-  // 3. with syntactic sugar
+  // 3. with syntactic sugar as Anonymous Function
   def superAdder1(x: Int): Int => Int = {
     (y:Int) => x + y
   }
